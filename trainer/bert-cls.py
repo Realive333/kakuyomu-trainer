@@ -57,9 +57,9 @@ def cls_average(pooler_output):
         cls_sum = [a+b for a, b in zip(pool_cls, cls_sum)]
     cls_avg = torch.tensor([a/BATCH_SIZE for a in cls_sum]).to('cuda')
     
-    #avg_linear = nn.Linear(768, 2).to('cuda')
-    #nn.init.normal_(avg_linear.weight, std=0.0001)
-    #nn.init.normal_(avg_linear.bias, 0.01)
+    avg_linear = nn.Linear(768, 2).to('cuda')
+    nn.init.normal_(avg_linear.weight, std=0.0001)
+    nn.init.normal_(avg_linear.bias, 0.01)
     
     return BERT.classifier(cls_avg)
 
@@ -70,10 +70,10 @@ def cls_grand(pooler_output):
     cls_gnd = torch.tensor(cls_append).to('cuda')
     
     gnd_linear = nn.Linear(768*BATCH_SIZE, 2).to('cuda')
-    #nn.init.normal_(gnd_linear.weight, std=0.0001)
-    #nn.init.normal_(gnd_linear.bias, 0.01)
-    gnd_linear.weight = torch.nn.Parameter(BERT_WEIGHTED_WEIGHT)
-    gnd_linear.bias = BERT_BIAS
+    nn.init.normal_(gnd_linear.weight, std=0.0001)
+    nn.init.normal_(gnd_linear.bias, 0.01)
+    #gnd_linear.weight = torch.nn.Parameter(BERT_WEIGHTED_WEIGHT)
+    #gnd_linear.bias = BERT_BIAS
     
     return gnd_linear(cls_gnd)
 
